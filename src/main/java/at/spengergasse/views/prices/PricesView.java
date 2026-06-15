@@ -73,6 +73,7 @@ public class PricesView extends VerticalLayout {
                 Treatment3, priceMini3, priceMaxi3, priceExtra3,
                 Treatment4, priceMini4, priceMaxi4, priceExtra4,
                 Treatment5, priceMini5, priceMaxi5, priceExtra5,
-                Treatment6, priceMini6, priceMaxi6, priceExtra6);
+                Treatment6, priceMini6, priceMaxi6, priceExtra6
+        );
     }
 }
