@@ -1,9 +1,13 @@
 package at.spengergasse.views.prices;
 
+import at.spengergasse.views.mashasspa.MashasSpaView;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
@@ -19,61 +23,54 @@ public class PricesView extends VerticalLayout {
     public PricesView() {
         setSpacing(false);
 
-        setAlignItems(Alignment.CENTER);
-
-        H1 companyName = new H1("Masha's Spa");
-        companyName.getStyle()
-                .set("font-family", "cursive")
-                .set("font-size", "6rem")
-                .set("margin", "0");
-
-        H2 subName = new H2 (" the place to relax");
-        subName.getStyle()
-                .set("margin","0")
-                .set("color", "gray");
+        VerticalLayout header = MashasSpaView.getHeader();
 
         H2 pricelist = new H2("Preice List");
         pricelist.getStyle()
-                .set("margin","0")
+                .set("margin", "0")
                 .set("color", "gray");
 
-        H2 Treatment1 = new H2 ("Relax Massage");
-        Paragraph priceMini1 = new Paragraph("Price for 30min");
-        Paragraph priceMaxi1 = new Paragraph("Price for 60min");
-        Paragraph priceExtra1 = new Paragraph("Für warme Kräuterkompressen kommen 4 € dazu");
+        FlexLayout treatments = new FlexLayout();
+        VerticalLayout treatment1 =  getCard("Relax Massage", 35, 60, "Für warme Kräuterkompressen", 4);
+        VerticalLayout treatment2 =  getCard("Aromaöl‑Massage", 50, 85, "Ein Duftöl nach Wahl um ", 3);
+        VerticalLayout treatment3 =  getCard("Hot‑Stone‑Therapy", 55, 90, "Für warme Kräuterkompressen", 4);
+        VerticalLayout treatment4 =  getCard("Hydra Facial", 35, 60, "Für warme Kräuterkompressen", 4);
+        VerticalLayout treatment5 =  getCard("Premium Spa Ritual", 35, 60, "Für warme Kräuterkompressen", 4);
+        VerticalLayout treatment6 =  getCard("Fußreflexzonen‑Massage", 35, 60, "Für warme Kräuterkompressen", 4);
+        treatments.setWidthFull();
+        treatments.setJustifyContentMode(JustifyContentMode.CENTER);
+        treatments.setFlexWrap(FlexLayout.FlexWrap.WRAP);
+        treatments.add(treatment1, treatment2, treatment3, treatment4, treatment5, treatment6);
 
-        H2 Treatment2 = new H2 ("Aromaöl‑Massage");
-        Paragraph priceMini2 = new Paragraph("Price for 45min");
-        Paragraph priceMaxi2 = new Paragraph("Price for 900min");
-        Paragraph priceExtra2 = new Paragraph("Ein Duftöl nach Wahl kann für 3 € hinzugefügt werden");
+        Paragraph info = new Paragraph( "Inklusive Steuer");
 
-        H2 Treatment3 = new H2 ("Hot‑Stone‑Therapy");
-        Paragraph priceMini3 = new Paragraph("Price for 40min");
-        Paragraph priceMaxi3 = new Paragraph("Price for 75min");
-        Paragraph priceExtra3 = new Paragraph("Ein kurzer Nacken‑Wärmeboost kostet zusätzlich 5 €");
+        add (header, pricelist, treatments, info);
 
-        H2 Treatment4 = new H2 ("Hydra Facial");
-        Paragraph priceMini4 = new Paragraph("Price for 25min");
-        Paragraph priceMaxi4 = new Paragraph("Price for 45min");
-        Paragraph priceExtra4 = new Paragraph("Mit Hyaluron‑Serum‑Finish +10 €");
 
-        H2 Treatment5 = new H2 ("Premium Spa Ritual");
-        Paragraph priceMini5 = new Paragraph("Price for 60min");
-        Paragraph priceMaxi5 = new Paragraph("Price for 120min");
-        Paragraph priceExtra5 = new Paragraph("Luxus‑Aromakerzen während der Behandlung +6 €");
+    }
 
-        H2 Treatment6 = new H2 ("Fußreflexzonen‑Massage");
-        Paragraph priceMini6 = new Paragraph("Price for 20min");
-        Paragraph priceMaxi6 = new Paragraph("Price for 40min");
-        Paragraph priceExtra6 = new Paragraph("Ein pflegendes Fußpeeling kann für 5 € ergänzt werden");
 
-        add(companyName, subName, pricelist,
-                Treatment1, priceMini1, priceMaxi1, priceExtra1,
-                Treatment2, priceMini2, priceMaxi2, priceExtra2,
-                Treatment3, priceMini3, priceMaxi3, priceExtra3,
-                Treatment4, priceMini4, priceMaxi4, priceExtra4,
-                Treatment5, priceMini5, priceMaxi5, priceExtra5,
-                Treatment6, priceMini6, priceMaxi6, priceExtra6
-        );
+
+    public VerticalLayout getCard(String treatmentName, double priceMini, double priceMaxi,String nameExtra, double priceExtra) {
+
+    VerticalLayout treatment = new VerticalLayout();
+
+    H2 treatmentNameH2 = new H2(treatmentName);
+    Paragraph priceMiniP = new Paragraph("Price for 30min: " + priceMini + "€");
+    Paragraph priceMaxiP = new Paragraph("Price for 60min: " + priceMaxi + "€");
+    Paragraph priceExtraP = new Paragraph(nameExtra +  priceExtra + "€");
+    treatment.add(treatmentNameH2, priceMiniP, priceMaxiP, priceExtraP);
+
+    treatment.setWidth("350px");
+    treatment.setPadding(true);
+    treatment.setSpacing(false);
+    treatment.getStyle()
+            .set("border","1px solid lightgray")
+            .set("border-radius", "10px")
+            .set("margin","10px");
+    treatment.add (treatmentNameH2, priceMiniP,priceMaxiP,priceExtraP);
+
+    return treatment;
     }
 }
+

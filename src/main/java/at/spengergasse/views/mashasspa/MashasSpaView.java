@@ -29,16 +29,7 @@ public class MashasSpaView extends VerticalLayout {
 
         setAlignItems(Alignment.CENTER);
 
-        H1 companyName= new H1 ("Masha's Spa");
-        companyName.getStyle()
-                .set("font-family", "cursive")
-                .set("font-size", "6rem")
-                .set("margin","0");
-
-        H2 subName = new H2 (" the place to relax");
-        subName.getStyle()
-                .set("margin","0")
-                .set("color", "gray");
+        VerticalLayout header = getHeader();
 
         Paragraph line1 = new Paragraph ("At Masha’s Spa, we believe that true relaxation begins the moment you step through our doors. Our space is designed to help you disconnect from the noise of everyday life and reconnect with your inner calm. With a warm atmosphere, soothing scents, and a team dedicated to your well‑being, every visit becomes a peaceful escape.");
         line1.setWidth("500px");
@@ -66,7 +57,28 @@ public class MashasSpaView extends VerticalLayout {
         H3 street = new H3 ("Spengergasse 20");
         H3 city = new H3 ("1050 Wien");
 
-        add(companyName,subName,line1,line2,line3,name, street, city);
+        add(header,line1,line2,line3,name, street, city);
+    }
+
+    public static VerticalLayout getHeader() {
+        VerticalLayout header;
+
+        header= new VerticalLayout();
+        H1 companyName= new H1 ("Masha's Spa");
+        companyName.getStyle()
+                .set("font-family", "cursive")
+                .set("font-size", "6rem")
+                .set("margin","0");
+
+        H2 subName = new H2 (" the place to relax");
+        subName.getStyle()
+                .set("margin","0")
+                .set("color", "gray");
+
+        header.add(companyName,subName);
+
+        return header;
+
     }
 
 }
