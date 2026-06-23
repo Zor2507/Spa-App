@@ -64,6 +64,7 @@ public class MashasSpaView extends VerticalLayout {
         add(header,logoText,line2,line3,address);
     }
 
+
     public static VerticalLayout getHeader() {
         VerticalLayout header;
 
