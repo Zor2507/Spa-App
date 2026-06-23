@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicLong;
 //@AllArgsConstructor
 @EqualsAndHashCode(of = "spaTreatmentId", callSuper = false)
 @Entity
-public class SpaTreatments {
+public class SpaTreatment {
     @Id
     private Long    spaTreatmentId;
     private LocalDate spaTreatmentDate;
@@ -29,7 +29,7 @@ public class SpaTreatments {
     private static final String[] treatmentRooms = {"Lotus Room", "Harmony Room", "Zen Room", "Crystal Room"};
 
 
-    public SpaTreatments() {
+    public SpaTreatment() {
         setSpaTreatmentId();
         setSpaTreatmentDate(LocalDate.now());
         setCustomerName("Unknown");
@@ -39,7 +39,7 @@ public class SpaTreatments {
         setExtraServiceIncluded(false);
     }
 
-    public SpaTreatments(LocalDate spaTreatmentDate, String customerName, String treatmentRoom, Double price, Integer treatmentDurationMinutes, Boolean extraServiceIncluded) {
+    public SpaTreatment(LocalDate spaTreatmentDate, String customerName, String treatmentRoom, Double price, Integer treatmentDurationMinutes, Boolean extraServiceIncluded) {
         setSpaTreatmentId();
         setSpaTreatmentDate (spaTreatmentDate);
         setCustomerName (customerName);
@@ -51,7 +51,7 @@ public class SpaTreatments {
 
 
 
-    public SpaTreatments(Long spaTreatmentId, LocalDate spaTreatmentDate, String customerName, String treatmentRoom, Double price, Integer treatmentDurationMinutes, Boolean extraServiceIncluded) {
+    public SpaTreatment(Long spaTreatmentId, LocalDate spaTreatmentDate, String customerName, String treatmentRoom, Double price, Integer treatmentDurationMinutes, Boolean extraServiceIncluded) {
         setSpaTreatmentId(spaTreatmentId);
         setSpaTreatmentDate (spaTreatmentDate);
         setCustomerName (customerName);
@@ -79,7 +79,7 @@ public class SpaTreatments {
     }
 
     @Override
-    public SpaTreatments clone(){
-        return new SpaTreatments(spaTreatmentId,spaTreatmentDate, customerName, treatmentRoom,price, treatmentDurationMinutes, extraServiceIncluded);
+    public SpaTreatment clone(){
+        return new SpaTreatment(spaTreatmentId,spaTreatmentDate, customerName, treatmentRoom,price, treatmentDurationMinutes, extraServiceIncluded);
     }
 }

@@ -11,9 +11,9 @@ class spaTreatmentsTest {
 
     @Test
     void testWrongPrice() {
-        SpaTreatments a = null;
+        SpaTreatment a = null;
         try {
-            a = new SpaTreatments(LocalDate.now(), "Customer1", "Zen", 12.2, 50, true);
+            a = new SpaTreatment(LocalDate.now(), "Customer1", "Zen", 12.2, 50, true);
             System.out.println(a);
             assertEquals(1,0);
         }
@@ -25,9 +25,9 @@ class spaTreatmentsTest {
 
     @Test
     void testToString() {
-        SpaTreatments a = null;
+        SpaTreatment a = null;
         try {
-            a = new SpaTreatments(LocalDate.now(), "Customer1", "Zen", 25.5, 50, true);
+            a = new SpaTreatment(LocalDate.now(), "Customer1", "Zen", 25.5, 50, true);
             System.out.println(a);
             System.out.println(a.getSpaTreatmentDate());
             System.out.println(a.getCustomerName());
