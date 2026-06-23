@@ -1,18 +1,13 @@
 package at.spengergasse.views.prices;
 
-import at.spengergasse.views.mashasspa.MashasSpaView;
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.html.H1;
+import at.spengergasse.views.home.MashasSpaView;
 import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.theme.lumo.LumoUtility.Margin;
 import org.vaadin.lineawesome.LineAwesomeIconUrl;
 
 @PageTitle("Prices")
