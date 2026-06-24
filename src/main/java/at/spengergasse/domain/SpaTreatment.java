@@ -2,6 +2,7 @@ package at.spengergasse.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -18,15 +19,28 @@ import java.util.concurrent.atomic.AtomicLong;
 public class SpaTreatment {
     @Id
     private Long    spaTreatmentId;
+    @NotNull (message = "Treatment date is required!")
+    @PastOrPresent(message = "Treatments can only be in the past or present!")
     private LocalDate spaTreatmentDate;
+    @NotBlank(message = "Customer name is required!")
+    @Size(min=2, max=50, message = "Wrong name")
     private String customerName;
+    @NotNull (message = "Treatment room is required!")
+    @Pattern(regexp = "Lotus Room|Harmony Room|Zen Room|Crystal Room",
+            message = "The room must be Lotus-, Harmony-, Zen- or Crystal room")
     private String  treatmentRoom;
+    @NotNull (message = "Price is required!")
+    @DecimalMin(value = "20.0", message = "Minimum price €20")
+    @DecimalMax(value = "100.0", message = "Minimum price €100")
     private Double price;
+    @NotNull (message = "Treatment duration is required!")
     private Integer treatmentDurationMinutes;
+    @NotNull (message = "If extra serices are ordered is required!")
+    @Min(value = 20, message = "Minimal duration is 20mins")
+    @Max(value = 120, message = "Maximal duration is 120mins")
     private Boolean extraServiceIncluded;
 
     private static final AtomicLong sequence = new AtomicLong(1000);
-    private static final String[] treatmentRooms = {"Lotus Room", "Harmony Room", "Zen Room", "Crystal Room"};
 
 
     public SpaTreatment() {
@@ -73,9 +87,7 @@ public class SpaTreatment {
     }
 
     public void setTreatmentRooms(String treatmentRoom){
-       if(! Arrays.asList(treatmentRooms).contains(treatmentRoom))
-           throw  new SpaTreatmentsException("Unknown Room!");
-       this.treatmentRoom = treatmentRoom;
+        this.treatmentRoom = treatmentRoom;
     }
 
     @Override
