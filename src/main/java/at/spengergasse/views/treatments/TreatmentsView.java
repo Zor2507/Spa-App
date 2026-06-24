@@ -7,10 +7,12 @@ import at.spengergasse.views.home.HomeView;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -20,8 +22,10 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility.Margin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.lineawesome.LineAwesomeIconUrl;
+import tools.jackson.databind.ser.std.DelegatingSerializer;
 
 
+import java.time.LocalDate;
 
 
 @PageTitle("Treatments")
@@ -34,7 +38,7 @@ public class TreatmentsView extends VerticalLayout {
     private final Button buttonAdd1Euro = new Button ("Add 1Euro");
     private final Button buttonRemoveExtraTreatment = new Button ("Without extra treatment");
     private final Button buttonAddWrongPrice = new Button ("Add wrong price");
-    private final Grid<SpaTreatment> grid = new Grid<>(SpaTreatment.class,true);
+    private final Grid<SpaTreatment> grid = new Grid<>(SpaTreatment.class,false);
     private final SpaTreatmentsService spaTreatmentsService;
 
 
@@ -51,6 +55,47 @@ public class TreatmentsView extends VerticalLayout {
         buttonRemoveExtraTreatment.addClickListener((ClickEvent<Button> event) -> removeExtras());
         buttonAddWrongPrice.addClickListener((ClickEvent<Button> event) -> addWrongTreatment());
         add(new HorizontalLayout(buttonRemoveAll, buttonAdd10Treatments,buttonAdd1Euro, buttonRemoveExtraTreatment, buttonAddWrongPrice));
+
+
+        grid.addColumn(treatment -> treatment.getSpaTreatmentId())
+                .setHeader("Treatment ID")
+                .setSortable(true);
+        grid.addColumn(treatment -> treatment.getSpaTreatmentDate())
+                .setHeader("Treatment Date")
+                .setSortable(true);
+        grid.addColumn(treatment -> treatment.getCustomerName())
+                .setHeader("Treatment Date")
+                .setSortable(true);
+
+        Image l = new Image("icons/blume.png", "Flower picture");
+        l.setWidth("32px");
+        HorizontalLayout headerType = new HorizontalLayout(l, new Span("Room"));
+        grid.addColumn(treatment -> treatment.getTreatmentRoom())
+                .setHeader(headerType)
+                .setSortable(true);
+
+        grid.addColumn(treatment -> treatment.getPrice())
+                .setHeader("Treatment Price €")
+                .setSortable(true);
+        grid.addColumn(treatment -> treatment.getTreatmentDurationMinutes())
+                .setHeader("Treatment Duration min")
+                .setSortable(true);
+        grid.addColumn(treatment -> {
+                if (treatment.getExtraServiceIncluded()==true)
+                    return "with Extras";
+                else
+                    return "without Extras";
+            })
+            .setHeader("Extra Services")
+            .setSortable(true);
+
+        grid.addComponentColumn(treatment -> {
+                Checkbox extras = new Checkbox(treatment.getExtraServiceIncluded());
+                extras.setReadOnly(true);
+                return extras;
+            })
+        .setHeader("Extra Services")
+        .setSortable(true);
 
         add(grid);
         reload();
