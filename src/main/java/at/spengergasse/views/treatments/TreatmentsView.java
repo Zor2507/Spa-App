@@ -36,7 +36,7 @@ public class TreatmentsView extends VerticalLayout {
     private final Button buttonAdd1Euro = new Button ("Add 1Euro");
     private final Button buttonRemoveExtraTreatment = new Button ("Without extra treatment");
     private final Button buttonAddWrongPrice = new Button ("Add wrong price");
-    private final Button buttonAdd1Treatment = new Button ("Add Treatment");
+    private final Button buttonAdd1Treatment = new Button ("Add treatment");
     private final Grid<SpaTreatment> grid = new Grid<>(SpaTreatment.class,false);
     private final SpaTreatmentsService spaTreatmentsService;
 
@@ -53,7 +53,7 @@ public class TreatmentsView extends VerticalLayout {
         buttonAdd1Euro.addClickListener((ClickEvent<Button> event) -> add1Euro());
         buttonRemoveExtraTreatment.addClickListener((ClickEvent<Button> event) -> removeExtras());
         buttonAddWrongPrice.addClickListener((ClickEvent<Button> event) -> addWrongTreatment());
-        buttonAdd1Treatment.addClickListener((ClickEvent<Button> event) -> add1Treatment());
+        buttonAdd1Treatment.addClickListener((ClickEvent<Button> event) -> addEditTreatment(null));
         add(new HorizontalLayout(buttonRemoveAll, buttonAdd10Treatments,buttonAdd1Euro, buttonRemoveExtraTreatment, buttonAddWrongPrice, buttonAdd1Treatment));
 
 
@@ -98,7 +98,7 @@ public class TreatmentsView extends VerticalLayout {
         .setSortable(true);
 
         grid.addComponentColumn(treatment -> {
-                    Button delete = new Button("Delete");
+                    Button delete = new Button("Delete treatment");
                     delete.addClickListener(e ->remove1Treatment(treatment.getSpaTreatmentId()));
                     return delete;
 
@@ -108,24 +108,40 @@ public class TreatmentsView extends VerticalLayout {
 
         grid.addComponentColumn( treatment -> {
                 Button add1Treatment = new Button("Extend treatment");
-                add1Treatment.addClickListener((e ->addDuration(treatment.getSpaTreatmentId())));;
+                add1Treatment.addClickListener((e -> extendTreatment(treatment.getSpaTreatmentId())));;
             return add1Treatment;
 
              })
                 .setHeader("Action")
                 .setSortable(false);
 
+        grid.addComponentColumn(treatment -> {
+                Button editTreatment = new Button("Edit treatment");
+                editTreatment.addClickListener(e-> addEditTreatment(treatment));
+                return editTreatment;
+        })
+                .setHeader("Action")
+                .setSortable(false);
 
         add(grid);
         reload();
     }
 
+    private void addEditTreatment(SpaTreatment existingTreatment) {
+       Dialog dialog;
+       SpaTreatment treatment;
 
+       dialog = new Dialog();
 
-    private void add1Treatment() {
+       if(existingTreatment==null) {
+           dialog.setHeaderTitle("Add new treatment");
+           treatment = new SpaTreatment();
+       }
 
-       Dialog dialog = new Dialog();
-       dialog.setHeaderTitle("Add 1 treatment");
+       else {
+           dialog.setHeaderTitle("Edit treatment");
+           treatment = existingTreatment;
+       }
 
        TextField spaTreatmentId= new TextField("Treatment ID");
        DatePicker spaTreatmentDate = new DatePicker("Treamtent date");
@@ -150,7 +166,7 @@ public class TreatmentsView extends VerticalLayout {
        binder.forField(extraServiceIncluded)
                .bind("extraServiceIncluded");
 
-       SpaTreatment treatment = new SpaTreatment();
+
        binder.setBean(treatment);
 
        spaTreatmentId.setValue(""+treatment.getSpaTreatmentId());
@@ -172,10 +188,14 @@ public class TreatmentsView extends VerticalLayout {
        buttonOK.addClickListener(event->{
            try{
                if(binder.validate().isOk()==true){
-                   spaTreatmentsService.add1Treatment(treatment);
+                   if(existingTreatment==null)
+                       spaTreatmentsService.add1Treatment(treatment);
                    dialog.close();
                    reload();
-                   Notification.show("New treatment added");
+                   if(existingTreatment==null)
+                       Notification.show("New treatment added");
+                   else
+                       Notification.show("Existing treatment modified");
                }
                else{
                    Notification.show("Check your input!");
@@ -192,7 +212,7 @@ public class TreatmentsView extends VerticalLayout {
        dialog.open();
     }
 
-    private void addDuration(Long spaTreatmentId) {
+    private void extendTreatment(Long spaTreatmentId) {
         try {
             spaTreatmentsService.addDuration(spaTreatmentId);
             reload();
@@ -225,6 +245,7 @@ public class TreatmentsView extends VerticalLayout {
             reload();
         }
     }
+
     private void removeExtras(){
         try {
             spaTreatmentsService.removeExtraT();
@@ -236,6 +257,7 @@ public class TreatmentsView extends VerticalLayout {
         }
 
     }
+
     private void add1Euro(){
         try {
             spaTreatmentsService.add1Euro();
@@ -247,6 +269,7 @@ public class TreatmentsView extends VerticalLayout {
         }
 
     }
+
     private void add10treatments(){
        try{
            spaTreatmentsService.add10T();
@@ -261,6 +284,7 @@ public class TreatmentsView extends VerticalLayout {
            reload();
        }
     }
+
     public void removeAll(){
        try{
            spaTreatmentsService.removeAllT();
@@ -275,7 +299,6 @@ public class TreatmentsView extends VerticalLayout {
        }
 
     }
-
 
     private void reload(){
         grid.setItems(spaTreatmentsService.findAll());
