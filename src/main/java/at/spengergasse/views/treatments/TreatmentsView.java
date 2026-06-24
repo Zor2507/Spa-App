@@ -97,8 +97,49 @@ public class TreatmentsView extends VerticalLayout {
         .setHeader("Extra Services")
         .setSortable(true);
 
+        grid.addComponentColumn(treatment -> {
+                    Button delete = new Button("Delete");
+                    delete.addClickListener(e ->remove1Treatment(treatment.getSpaTreatmentId()));
+                    return delete;
+
+            })
+                .setHeader("Action")
+                .setSortable(false);
+
+        grid.addComponentColumn( treatment -> {
+                Button add1Treatment = new Button("Add 1 Treatment");
+                add1Treatment.addClickListener((e ->add1Treatment(treatment.getSpaTreatmentId())));;
+            return add1Treatment;
+
+             })
+                .setHeader("Action")
+                .setSortable(false);
+
+
         add(grid);
         reload();
+    }
+
+    private void add1Treatment(Long spaTreatmentId) {
+        try {
+            spaTreatmentsService.add1Treatment(spaTreatmentId);
+            reload();
+        }
+        catch (SpaTreatmentsException e) {
+            Notification.show(e.getMessage());
+        }
+
+    }
+
+    private void remove1Treatment(Long spaTreatmentId) {
+        try{
+            spaTreatmentsService.remove1Treatment(spaTreatmentId);
+            reload();
+        }
+        catch (SpaTreatmentsException e) {
+            Notification.show(e.getMessage());
+            reload();
+        }
     }
 
     private void addWrongTreatment(){

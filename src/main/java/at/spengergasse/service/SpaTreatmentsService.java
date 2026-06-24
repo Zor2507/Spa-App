@@ -1,6 +1,7 @@
 package at.spengergasse.service;
 
 import at.spengergasse.domain.SpaTreatment;
+import at.spengergasse.domain.SpaTreatmentsException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -13,12 +14,13 @@ public class SpaTreatmentsService {
 
     private ArrayList<SpaTreatment> spaTreatments;
 
-    public SpaTreatmentsService(){
+    public SpaTreatmentsService() {
         spaTreatments = new ArrayList<>(1000);
         fillTestData();
     }
 
-    public void fillTestData(){
+
+    public void fillTestData() {
         spaTreatments.add(new SpaTreatment(LocalDate.of(2026, 1, 5), "Anna Müller", "Lotus Room", 35.0, 30, false));
         spaTreatments.add(new SpaTreatment(LocalDate.of(2026, 1, 6), "Lukas Steiner", "Harmony Room", 50.0, 45, true));
         spaTreatments.add(new SpaTreatment(LocalDate.of(2026, 1, 7), "Maria Novak", "Zen Room", 55.0, 40, false));
@@ -59,10 +61,10 @@ public class SpaTreatmentsService {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         String erg = "";
 
-        for (SpaTreatment t : spaTreatments){
+        for (SpaTreatment t : spaTreatments) {
             erg += t.toString() + "\n";
         }
         return erg;
@@ -95,8 +97,8 @@ public class SpaTreatmentsService {
     }
 
     public void add1Euro() {
-        for (SpaTreatment t : spaTreatments){
-            t.setPrice(t.getPrice()+1);
+        for (SpaTreatment t : spaTreatments) {
+            t.setPrice(t.getPrice() + 1);
         }
 
     }
@@ -104,10 +106,10 @@ public class SpaTreatmentsService {
     public void removeExtraT() {
         Iterator<SpaTreatment> it;
         SpaTreatment t;
-        it= spaTreatments.iterator();
-        while (it.hasNext()){
-            t=it.next();
-            if (t.getExtraServiceIncluded()==true){
+        it = spaTreatments.iterator();
+        while (it.hasNext()) {
+            t = it.next();
+            if (t.getExtraServiceIncluded() == true) {
                 it.remove();
             }
 
@@ -116,5 +118,30 @@ public class SpaTreatmentsService {
 
     public void addWrongTreatment() {
         spaTreatments.add(new SpaTreatment(LocalDate.of(2026, 2, 3), "Alex Müller", "Harmony Room", -15.0, 20, true));
+    }
+
+    public void remove1Treatment(Long spaTreatmentId) {
+      /*  spaTreatments treatment;
+        for(SpaTreatment t: spaTreatments) {
+            if (t.getSpaTreatmentId().equals(spaTreatmentId))
+                treatment = t;
+        }
+        spaTreatments.remove(treatment); */
+
+        if (spaTreatmentId == null)
+            throw new SpaTreatmentsException("This treatment does not exist!");
+
+        if (spaTreatments.removeIf(t->t.getSpaTreatmentId().equals(spaTreatmentId))==false)
+            throw new SpaTreatmentsException("This treatment does not exist!");
+    }
+
+    public void add1Treatment(Long spaTreatmentId) {
+        if (spaTreatmentId == null)
+            throw new SpaTreatmentsException("This treatment does not exist!");
+
+        for (SpaTreatment d: spaTreatments) {
+            if (d.getSpaTreatmentId().equals(spaTreatmentId))
+                d.setTreatmentDurationMinutes(d.getTreatmentDurationMinutes()+30);
+        }
     }
 }
