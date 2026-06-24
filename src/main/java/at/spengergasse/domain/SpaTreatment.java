@@ -30,13 +30,13 @@ public class SpaTreatment {
 
 
     public SpaTreatment() {
-        setSpaTreatmentId();
-        setSpaTreatmentDate(LocalDate.now());
-        setCustomerName("Unknown");
-        setTreatmentRoom("Zen Room");
-        setPrice(60.0);
-        setTreatmentDurationMinutes(60);
-        setExtraServiceIncluded(false);
+        //setSpaTreatmentId();
+        //setSpaTreatmentDate(LocalDate.now());
+        //setCustomerName("Unknown");
+        //setTreatmentRoom("Zen Room");
+        //setPrice(60.0);
+        //setTreatmentDurationMinutes(60);
+        //setExtraServiceIncluded(false);
     }
 
     public SpaTreatment(LocalDate spaTreatmentDate, String customerName, String treatmentRoom, Double price, Integer treatmentDurationMinutes, Boolean extraServiceIncluded) {

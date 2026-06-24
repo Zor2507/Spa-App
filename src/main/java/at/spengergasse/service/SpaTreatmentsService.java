@@ -14,6 +14,7 @@ public class SpaTreatmentsService {
 
     public SpaTreatmentsService(){
         spaTreatments = new ArrayList<>(1000);
+        fillTestData();
     }
     @Override
 
@@ -67,5 +68,10 @@ public class SpaTreatmentsService {
 
     }
 
+    public ArrayList<SpaTreatment> findAll() {
+        ArrayList<SpaTreatment> clone;
+        clone = new ArrayList<>(spaTreatments);
+        return clone;
+    }
 
 }

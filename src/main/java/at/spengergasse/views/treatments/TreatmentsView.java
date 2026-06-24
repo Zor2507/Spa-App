@@ -1,5 +1,8 @@
 package at.spengergasse.views.treatments;
 
+import at.spengergasse.domain.SpaTreatment;
+import at.spengergasse.service.SpaTreatmentsService;
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Paragraph;
@@ -8,6 +11,7 @@ import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility.Margin;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.lineawesome.LineAwesomeIconUrl;
 
 @PageTitle("Treatments")
@@ -15,22 +19,21 @@ import org.vaadin.lineawesome.LineAwesomeIconUrl;
 @Menu(order = 1, icon = LineAwesomeIconUrl.SPA_SOLID)
 public class TreatmentsView extends VerticalLayout {
 
-    public TreatmentsView() {
-        setSpacing(false);
+    private final Grid<SpaTreatment> grid = new Grid<>(SpaTreatment.class,true);
+    private final SpaTreatmentsService spaTreatmentsService;
 
-        Image img = new Image("images/empty-plant.png", "placeholder plant");
-        img.setWidth("200px");
-        add(img);
 
-        H2 header = new H2("This place intentionally left empty");
-        header.addClassNames(Margin.Top.XLARGE, Margin.Bottom.MEDIUM);
-        add(header);
-        add(new Paragraph("It’s a place where you can grow your own UI 🤗"));
+    public TreatmentsView(@Autowired SpaTreatmentsService spaTreatmentsService) {
+        this.spaTreatmentsService = spaTreatmentsService;
 
+        setSpacing(true);
         setSizeFull();
-        setJustifyContentMode(JustifyContentMode.CENTER);
-        setDefaultHorizontalComponentAlignment(Alignment.CENTER);
-        getStyle().set("text-align", "center");
+        grid.setSizeFull();
+        add(grid);
+        reload();
+    }
+    private void reload(){
+        grid.setItems(spaTreatmentsService.findAll());
     }
 
 }

@@ -1,6 +1,6 @@
 package at.spengergasse.views.prices;
 
-import at.spengergasse.views.home.MashasSpaView;
+import at.spengergasse.views.home.HomeView;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
@@ -18,7 +18,7 @@ public class PricesView extends VerticalLayout {
     public PricesView() {
         setSpacing(false);
 
-        VerticalLayout header = MashasSpaView.getHeader();
+        VerticalLayout header = HomeView.getHeader();
 
         H2 pricelist = new H2("Preice List");
         pricelist.getStyle()

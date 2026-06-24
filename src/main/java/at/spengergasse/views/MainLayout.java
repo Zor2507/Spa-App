@@ -25,6 +25,7 @@ import java.util.List;
 @Layout
 @AnonymousAllowed
 public class MainLayout extends AppLayout implements AfterNavigationObserver {
+
     private H1 viewTitle;
 
     public MainLayout() {
