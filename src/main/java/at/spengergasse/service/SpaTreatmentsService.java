@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.stream.Collectors;
 
 @Service
 public class SpaTreatmentsService {
@@ -135,7 +134,7 @@ public class SpaTreatmentsService {
             throw new SpaTreatmentsException("This treatment does not exist!");
     }
 
-    public void add1Treatment(Long spaTreatmentId) {
+    public void addDuration(Long spaTreatmentId) {
         if (spaTreatmentId == null)
             throw new SpaTreatmentsException("This treatment does not exist!");
 
@@ -143,5 +142,11 @@ public class SpaTreatmentsService {
             if (d.getSpaTreatmentId().equals(spaTreatmentId))
                 d.setTreatmentDurationMinutes(d.getTreatmentDurationMinutes()+30);
         }
+    }
+
+    public void add1Treatment(SpaTreatment treatment) {
+        if (treatment==null)
+            throw new SpaTreatmentsException("No treatment!");
+        spaTreatments.add(treatment);
     }
 }

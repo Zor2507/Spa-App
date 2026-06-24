@@ -3,34 +3,32 @@ package at.spengergasse.views.treatments;
 import at.spengergasse.domain.SpaTreatment;
 import at.spengergasse.domain.SpaTreatmentsException;
 import at.spengergasse.service.SpaTreatmentsService;
-import at.spengergasse.views.home.HomeView;
 import com.vaadin.flow.component.ClickEvent;
-import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.IntegerField;
+import com.vaadin.flow.component.textfield.NumberField;
+import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.theme.lumo.LumoUtility.Margin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.lineawesome.LineAwesomeIconUrl;
-import tools.jackson.databind.ser.std.DelegatingSerializer;
-
-
-import java.time.LocalDate;
-
 
 @PageTitle("Treatments")
 @Route("treatments")
 @Menu(order = 1, icon = LineAwesomeIconUrl.SPA_SOLID)
+
 public class TreatmentsView extends VerticalLayout {
 
     private final Button buttonRemoveAll = new Button("Remove all");
@@ -38,6 +36,7 @@ public class TreatmentsView extends VerticalLayout {
     private final Button buttonAdd1Euro = new Button ("Add 1Euro");
     private final Button buttonRemoveExtraTreatment = new Button ("Without extra treatment");
     private final Button buttonAddWrongPrice = new Button ("Add wrong price");
+    private final Button buttonAdd1Treatment = new Button ("Add Treatment");
     private final Grid<SpaTreatment> grid = new Grid<>(SpaTreatment.class,false);
     private final SpaTreatmentsService spaTreatmentsService;
 
@@ -54,7 +53,8 @@ public class TreatmentsView extends VerticalLayout {
         buttonAdd1Euro.addClickListener((ClickEvent<Button> event) -> add1Euro());
         buttonRemoveExtraTreatment.addClickListener((ClickEvent<Button> event) -> removeExtras());
         buttonAddWrongPrice.addClickListener((ClickEvent<Button> event) -> addWrongTreatment());
-        add(new HorizontalLayout(buttonRemoveAll, buttonAdd10Treatments,buttonAdd1Euro, buttonRemoveExtraTreatment, buttonAddWrongPrice));
+        buttonAdd1Treatment.addClickListener((ClickEvent<Button> event) -> add1Treatment());
+        add(new HorizontalLayout(buttonRemoveAll, buttonAdd10Treatments,buttonAdd1Euro, buttonRemoveExtraTreatment, buttonAddWrongPrice, buttonAdd1Treatment));
 
 
         grid.addColumn(treatment -> treatment.getSpaTreatmentId())
@@ -64,7 +64,7 @@ public class TreatmentsView extends VerticalLayout {
                 .setHeader("Treatment Date")
                 .setSortable(true);
         grid.addColumn(treatment -> treatment.getCustomerName())
-                .setHeader("Treatment Date")
+                .setHeader("Customer Name")
                 .setSortable(true);
 
         Image l = new Image("icons/blume.png", "Flower picture");
@@ -107,8 +107,8 @@ public class TreatmentsView extends VerticalLayout {
                 .setSortable(false);
 
         grid.addComponentColumn( treatment -> {
-                Button add1Treatment = new Button("Add 1 Treatment");
-                add1Treatment.addClickListener((e ->add1Treatment(treatment.getSpaTreatmentId())));;
+                Button add1Treatment = new Button("Extend treatment");
+                add1Treatment.addClickListener((e ->addDuration(treatment.getSpaTreatmentId())));;
             return add1Treatment;
 
              })
@@ -120,11 +120,84 @@ public class TreatmentsView extends VerticalLayout {
         reload();
     }
 
-    private void add1Treatment(Long spaTreatmentId) {
+
+
+    private void add1Treatment() {
+
+       Dialog dialog = new Dialog();
+       dialog.setHeaderTitle("Add 1 treatment");
+
+       TextField spaTreatmentId= new TextField("Treatment ID");
+       DatePicker spaTreatmentDate = new DatePicker("Treamtent date");
+       TextField customerName = new TextField("Customer name");
+       ComboBox treatmentRoom = new ComboBox ("Treatment room");
+       treatmentRoom.setItems("Lotus Room","Harmony Room","Zen Room","Crystal Room");
+       NumberField price = new NumberField("Price");
+       IntegerField treatmentDurationMinutes = new IntegerField("Treatment duration");
+       Checkbox extraServiceIncluded = new Checkbox("Extras");
+
+       BeanValidationBinder<SpaTreatment>binder = new BeanValidationBinder<>(SpaTreatment.class);
+       binder.forField(spaTreatmentDate)
+               .bind("spaTreatmentDate");
+       binder.forField(customerName)
+               .bind("customerName");
+       binder.forField(treatmentRoom)
+                .bind("treatmentRoom");
+       binder.forField(price)
+               .bind("price");
+       binder.forField(treatmentDurationMinutes)
+               .bind("treatmentDurationMinutes");
+       binder.forField(extraServiceIncluded)
+               .bind("extraServiceIncluded");
+
+       SpaTreatment treatment = new SpaTreatment();
+       binder.setBean(treatment);
+
+       spaTreatmentId.setValue(""+treatment.getSpaTreatmentId());
+       spaTreatmentId.setReadOnly(true);
+
+       VerticalLayout formLayout = new VerticalLayout(
+               spaTreatmentId,
+               spaTreatmentDate,
+               customerName,
+               treatmentRoom,
+               price,
+               treatmentDurationMinutes,
+               extraServiceIncluded
+
+       );
+       Button buttonOK = new Button ("OK");
+       Button buttonCancel = new Button ("Cancel");
+
+       buttonOK.addClickListener(event->{
+           try{
+               if(binder.validate().isOk()==true){
+                   spaTreatmentsService.add1Treatment(treatment);
+                   dialog.close();
+                   reload();
+                   Notification.show("New treatment added");
+               }
+               else{
+                   Notification.show("Check your input!");
+               }
+           }
+           catch (SpaTreatmentsException e){
+               Notification.show(e.getMessage());
+           }
+       });
+       buttonCancel.addClickListener(event->dialog.close());
+
+       dialog.add(formLayout);
+       dialog.getFooter().add(buttonOK,buttonCancel);
+       dialog.open();
+    }
+
+    private void addDuration(Long spaTreatmentId) {
         try {
-            spaTreatmentsService.add1Treatment(spaTreatmentId);
+            spaTreatmentsService.addDuration(spaTreatmentId);
             reload();
         }
+
         catch (SpaTreatmentsException e) {
             Notification.show(e.getMessage());
         }

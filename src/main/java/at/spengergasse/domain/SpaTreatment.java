@@ -34,23 +34,23 @@ public class SpaTreatment {
     @DecimalMax(value = "100.0", message = "Minimum price €100")
     private Double price;
     @NotNull (message = "Treatment duration is required!")
-    private Integer treatmentDurationMinutes;
-    @NotNull (message = "If extra serices are ordered is required!")
     @Min(value = 20, message = "Minimal duration is 20mins")
     @Max(value = 120, message = "Maximal duration is 120mins")
+    private Integer treatmentDurationMinutes;
+    @NotNull (message = "If extra serices are ordered is required!")
     private Boolean extraServiceIncluded;
 
     private static final AtomicLong sequence = new AtomicLong(1000);
 
 
     public SpaTreatment() {
-        //setSpaTreatmentId();
-        //setSpaTreatmentDate(LocalDate.now());
-        //setCustomerName("Unknown");
-        //setTreatmentRoom("Zen Room");
-        //setPrice(60.0);
-        //setTreatmentDurationMinutes(60);
-        //setExtraServiceIncluded(false);
+        setSpaTreatmentId();
+        setSpaTreatmentDate(LocalDate.now());
+        setCustomerName("Unknown");
+        setTreatmentRoom("Zen Room");
+        setPrice(60.0);
+        setTreatmentDurationMinutes(60);
+        setExtraServiceIncluded(false);
     }
 
     public SpaTreatment(LocalDate spaTreatmentDate, String customerName, String treatmentRoom, Double price, Integer treatmentDurationMinutes, Boolean extraServiceIncluded) {
