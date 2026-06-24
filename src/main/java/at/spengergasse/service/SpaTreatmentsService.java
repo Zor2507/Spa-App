@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.stream.Collectors;
 
 @Service
@@ -16,23 +17,6 @@ public class SpaTreatmentsService {
         spaTreatments = new ArrayList<>(1000);
         fillTestData();
     }
-    @Override
-
-    public String toString(){
-        String erg = "";
-
-        for (SpaTreatment t : spaTreatments){
-            erg += t.toString() + "\n";
-        }
-        return erg;
-    }
-
-    /* das gleiche wie:
-    public String toString(){
-        return spaTreatments.stream()
-                .map(d->d.toString())
-                .collect(Collectors.joining("\n"));
-    }*/
 
     public void fillTestData(){
         spaTreatments.add(new SpaTreatment(1L, LocalDate.of(2026, 1, 5), "Anna Müller", "Lotus Room", 35.0, 30, false));
@@ -74,4 +58,59 @@ public class SpaTreatmentsService {
         return clone;
     }
 
+    @Override
+    public String toString(){
+        String erg = "";
+
+        for (SpaTreatment t : spaTreatments){
+            erg += t.toString() + "\n";
+        }
+        return erg;
+    }
+
+    /* das gleiche wie:
+    public String toString(){
+        return spaTreatments.stream()
+                .map(d->d.toString())
+                .collect(Collectors.joining("\n"));
+    }*/
+
+
+    public void removeAllT() {
+        spaTreatments.clear();
+    }
+
+
+    public void add10T() {
+        spaTreatments.add(new SpaTreatment(1L, LocalDate.of(2026, 1, 5), "Anna Müller", "Lotus Room", 35.0, 30, false));
+        spaTreatments.add(new SpaTreatment(2L, LocalDate.of(2026, 1, 6), "Lukas Steiner", "Harmony Room", 50.0, 45, true));
+        spaTreatments.add(new SpaTreatment(3L, LocalDate.of(2026, 1, 7), "Maria Novak", "Zen Room", 55.0, 40, false));
+        spaTreatments.add(new SpaTreatment(4L, LocalDate.of(2026, 1, 8), "Julia Weber", "Crystal Room", 45.0, 25, true));
+        spaTreatments.add(new SpaTreatment(5L, LocalDate.of(2026, 1, 9), "David König", "Lotus Room", 95.0, 60, false));
+        spaTreatments.add(new SpaTreatment(6L, LocalDate.of(2026, 1, 10), "Sophie Bauer", "Harmony Room", 25.0, 20, true));
+        spaTreatments.add(new SpaTreatment(7L, LocalDate.of(2026, 1, 11), "Markus Leitner", "Zen Room", 60.0, 60, false));
+        spaTreatments.add(new SpaTreatment(8L, LocalDate.of(2026, 1, 12), "Elena Petrova", "Crystal Room", 85.0, 90, true));
+        spaTreatments.add(new SpaTreatment(9L, LocalDate.of(2026, 1, 13), "Thomas Berger", "Lotus Room", 90.0, 75, false));
+        spaTreatments.add(new SpaTreatment(10L, LocalDate.of(2026, 1, 14), "Nina Schwarz", "Harmony Room", 75.0, 45, true));
+    }
+
+    public void add1Euro() {
+        for (SpaTreatment t : spaTreatments){
+            t.setPrice(t.getPrice()+1);
+        }
+
+    }
+
+    public void removeExtraT() {
+        Iterator<SpaTreatment> it;
+        SpaTreatment t;
+        it= spaTreatments.iterator();
+        while (it.hasNext()){
+            t=it.next();
+            if (t.getExtraServiceIncluded()==true){
+                it.remove();
+            }
+
+        }
+    }
 }
